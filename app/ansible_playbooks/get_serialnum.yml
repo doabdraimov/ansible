@@ -1,0 +1,17 @@
+---
+- name: get serail numer of device
+  gather_facts: true
+  strategy: free
+  hosts:
+    - cisco_ios
+  tasks:
+    - name: Get config from cisco ios facts
+      ios_facts:
+        gather_subset:
+          - hardware
+
+    - name: Display model and serial number
+      ansible.builtin.debug: 
+        msg: 
+          - "Model number of {{ ansible_net_hostname }} is {{ ansible_net_model }} and serial number is {{ ansible_net_serialnum
+}}"

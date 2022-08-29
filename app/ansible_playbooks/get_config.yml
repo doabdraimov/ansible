@@ -1,0 +1,26 @@
+---
+- name: Save config
+  gather_facts: true
+  strategy: free
+  hosts:
+    - cisco_ios
+  vars:
+    - date_timestamp: "{{ lookup('pipe', 'date +%Y_%m_%d') }}"
+    - config_path: "/opt/ansible/configs/{{ansible_net_hostname}}"
+
+  tasks:
+    - name: Create directoryes
+      file:
+        path: "{{ config_path }}"
+        state: directory
+
+    - name: Get config from cisco ios facts
+      ios_facts:
+        gather_subset:
+          - hardware
+          - config
+
+    - name: Write config into var:config_path
+      copy:
+        content: "{{ ansible_net_config }}"
+        dest: "{{ config_path }}/{{ date_timestamp }}_{{ ansible_net_hostname }}.txt"

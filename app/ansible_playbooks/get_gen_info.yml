@@ -1,0 +1,26 @@
+---
+- name: Get Ip_Host, Hostname, Model,  S/N, 
+  gather_facts: true
+  strategy: free
+  hosts:
+    - cisco_ios
+  vars:
+    - log_file: "/opt/ansible/log.txt"
+  tasks:
+
+    - name: Get ios facts
+      ios_facts:
+        gather_subset:
+          - hardware
+
+    - name: write result to file
+      lineinfile:
+        # output like "8.8.8.8 router1.rtr C881-K9 FCZ123456789"
+        line: "{{ ansible_ssh_host }} {{ ansible_net_hostname }} {{ ansible_net_model }} {{ ansible_net_serialnum }} {{ ansible_net_image }}" 
+        insertafter: EOF
+        dest: "{{ log_file }}"
+
+#    - name: Debug
+#      debug:
+#        msg: "{{ ansible_ssh_host }} {{ ansible_net_hostname }} {{ ansible_net_model }} {{ ansible_net_serialnum }} {{ ansible_net_image }}"
+#        #message like: 8.8.8.8 router1.rtr C881-K9 FCZ123456789
