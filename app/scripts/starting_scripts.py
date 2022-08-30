@@ -36,7 +36,6 @@ def checkIfProcessRunning(processName):
 def main():
     path = '/home/robot/scripts'
     while True:
-        loop_count += 1
         scripts =getScriptsFiles(path)
         if scripts:
             for script in scripts:
